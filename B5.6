@@ -1,0 +1,97 @@
+import time as t
+def start():
+    print('КРЕСТИКИ-НОЛИКИ v1.0')
+    print("--------------------")
+    t.sleep(2)
+    print('Приветствуем вас!')
+    t.sleep(1)
+    print('Это игра крестики-нолики')
+    t.sleep(2)
+    print('Формат ввода: x y')
+    print('x - номер строки')
+    print('y - номер столбца')
+    t.sleep(3)
+    print('Приятной игры!')
+    t.sleep(2)
+
+def show_field(f):
+    print('  0 1 2')
+    for i in range(len(f)):
+        print(str(i) + " " + " " + (' '.join(f[i])))
+
+def Xor0(a):
+    if a == '0':
+        print ("Сейчас ходит нолик.")
+    if a == 'X':
+        print("Сейчас ходит крестик.")
+
+def user_input(f):
+    while True:
+        place = input("Введите координаты:").split()
+        if len(place)!=2:
+            print("Необходимо ввести две координаты:")
+            continue
+        if not (place[0].isdigit() and place[1].isdigit()):
+            print("Введите числа:")
+            continue
+        x,y = map(int,place)
+        if not(0<=x and x<3 and 0<=y and y<3):
+            print("Вы вышли из диапазона:")
+            continue
+        if f[x][y]!="-":
+            print("Клетка занята:")
+            continue
+
+        break
+    return x,y
+
+def check_win():
+    for i  in range(3):
+        symbols = []
+        for j in range(3):
+            symbols.append(field[i][j])
+        if symbols == ["X", "X", "X"]:
+            return True
+    for i  in range(3):
+        symbols = []
+        for j in range(3):
+            symbols.append(field[j][i])
+        if symbols == ["X", "X", "X"]:
+            return True
+    symbols = []
+    for i  in range(3):
+            symbols.append(field[i][i])
+    if symbols == ["X", "X", "X"]:
+        return True
+    symbols = []
+    for i  in range(3):
+            symbols.append(field[i][2-i])
+    if symbols == ["X", "X", "X"]:
+        return True
+    return False
+
+start()
+field = [["-"] * 3 for _ in range(3)]
+count = 0
+while True:
+    if count==9:
+        print("Ничья!")
+        break
+    if count%2==0:
+        user = "X"
+        if check_win():
+            print("Выиграл 0!!!")
+            show_field(field)
+            break
+        Xor0("X")
+    else:
+        user = "0"
+        if check_win():
+            print("Выиграл X!!!")
+            show_field(field)
+            break
+        Xor0("0")
+    show_field(field)
+    x,y = user_input(field)
+    field[x][y]=user
+    count+=1
